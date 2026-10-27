@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>静力维持 · 居家 4 周训练计划</title>
+<style>
+  :root{
+    --ink:#12211f;
+    --sub:#5b6b68;
+    --line:#e2e8e6;
+    --bg:#f5f7f6;
+    --card:#ffffff;
+    --teal:#0f5f52;
+    --teal-soft:#e7f2ef;
+    --amber:#c2670f;
+    --amber-soft:#fbf0e3;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:40px 20px 64px}
+  header.top{
+    border-bottom:2px solid var(--teal);
+    padding-bottom:22px;
+    margin-bottom:26px;
+  }
+  .kicker{
+    font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--teal);font-weight:700;margin-bottom:8px;
+  }
+  h1{font-size:30px;line-height:1.25;margin:0 0 10px;letter-spacing:-.01em}
+  .lede{color:var(--sub);font-size:15px;margin:0}
+  .meta{
+    margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;
+  }
+  .tag{
+    font-size:12px;background:var(--teal-soft);color:var(--teal);
+    padding:3px 10px;border-radius:999px;font-weight:600;
+  }
+  section{margin:34px 0 0}
+  h2{
+    font-size:19px;margin:0 0 14px;padding-left:11px;
+    border-left:4px solid var(--teal);line-height:1.3;
+  }
+  h3{font-size:15px;margin:20px 0 8px}
+  p{margin:8px 0;font-size:14.5px}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:18px 20px;
+  }
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:700px){.grid{grid-template-columns:1fr}}
+  .rule{
+    background:var(--teal-soft);border-left:4px solid var(--teal);
+    border-radius:0 10px 10px 0;padding:14px 16px;font-size:14.5px;
+  }
+  .rule b{color:var(--teal)}
+  .warn{
+    background:var(--amber-soft);border-left:4px solid var(--amber);
+    border-radius:0 10px 10px 0;padding:14px 16px;font-size:14px;
+  }
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff}
+  th,td{padding:10px 12px;border:1px solid var(--line);text-align:left;vertical-align:top}
+  th{background:var(--teal-soft);color:var(--teal);font-weight:700;white-space:nowrap}
+  td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+  caption{caption-side:top;text-align:left;font-size:12.5px;color:var(--sub);padding:0 0 6px}
+  .moves{display:grid;gap:10px}
+  .move{
+    background:#fff;border:1px solid var(--line);border-radius:10px;
+    padding:14px 16px;display:grid;grid-template-columns:34px 1fr;gap:12px;
+  }
+  .move .idx{
+    width:34px;height:34px;border-radius:50%;background:var(--teal);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;
+  }
+  .move h4{margin:0 0 4px;font-size:15px}
+  .move .dose{font-size:12.5px;color:var(--teal);font-weight:700;margin-bottom:4px}
+  .move ul{margin:4px 0 0;padding-left:18px;font-size:13.5px;color:#31423f}
+  .move li{margin:3px 0}
+  .move .fix{color:var(--sub);font-size:13px;margin-top:6px}
+  .checklist{list-style:none;padding:0;margin:0;font-size:14px}
+  .checklist li{
+    padding:8px 0 8px 26px;border-bottom:1px dashed var(--line);position:relative;
+  }
+  .checklist li:before{
+    content:"";position:absolute;left:2px;top:13px;width:12px;height:12px;
+    border:1.5px solid #9db3ae;border-radius:3px;
+  }
+  .checklist li:last-child{border-bottom:none}
+  /* 计时器 */
+  .timer{
+    background:var(--ink);color:#fff;border-radius:14px;padding:22px;
+    display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;
+  }
+  .timer .display{
+    font-size:56px;font-weight:700;font-variant-numeric:tabular-nums;
+    letter-spacing:-.02em;line-height:1;
+  }
+  .timer .phase{font-size:13px;color:#9fd3c6;letter-spacing:.08em;margin-bottom:6px;font-weight:600}
+  .timer .hint{font-size:12.5px;color:#a8b8b4;margin-top:8px}
+  .timer .btns{display:flex;flex-direction:column;gap:8px}
+  .timer button{
+    font:inherit;font-size:13px;font-weight:600;cursor:pointer;
+    background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);
+    border-radius:8px;padding:9px 16px;min-width:96px;
+  }
+  .timer button.main{background:#2fae91;border-color:#2fae91;color:#06231d}
+  .presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .presets span{
+    cursor:pointer;font-size:12px;padding:4px 10px;border-radius:999px;
+    background:var(--teal-soft);color:var(--teal);font-weight:600;
+  }
+  .presets span.on{background:var(--teal);color:#fff}
+  footer{
+    margin-top:44px;padding-top:16px;border-top:1px solid var(--line);
+    font-size:12px;color:#8a9a96;
+  }
+  @media print{
+    body{background:#fff}
+    .timer,.presets{display:none}
+    .wrap{padding:0}
+    section{page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="kicker">居家自重 · 低门槛 · 可执行</div>
+    <h1>静力维持居家训练计划</h1>
+    <p class="lede">基于抖音 @XXL健身《静力维持如何练就隐性力量》整理成 4 周可落地课表：每周 3–4 次，每次 15 分钟左右，全部动作只用墙、台阶、门框和单杠。</p>
+    <div class="meta">
+      <span class="tag">4 个动作</span>
+      <span class="tag">每组 20–45 秒</span>
+      <span class="tag">强度约 7 成力</span>
+      <span class="tag">无器械 / 零跳跃</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>视频要点（4:45，8 个章节）</h2>
+    <div class="grid">
+      <div class="card">
+        <h3 style="margin-top:0">为什么练静力</h3>
+        <p>视频给的比喻：<b>肌肉是发动机，肌腱是牵引绳</b>。绳子松散，发动机再猛也传不出去。静力维持让腱组织持续受力、逐步变硬，力量才"不漏"。视频提到长期（约 12 周）规律训练后肌腱刚度会上升，但肌肉围度增长很小——所以它练的是<b>隐性力量</b>，不是块头。</p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">两个必守法则</h3>
+        <p><b>① 时间够长：</b>单次维持不低于 20 秒，20–45 秒为区间。<br>
+           <b>② 负荷够大：</b>保持约 <b>7 成力</b>——能稳稳撑住、但最后 5 秒明显吃力，且姿势不变形。</p>
+        <p style="color:var(--sub)">低于 20 秒或只出三成力，基本练不到腱。</p>
+      </div>
+    </div>
+    <div class="warn" style="margin-top:14px">
+      <b>视频点名的 3 个误区：</b>① 短促快收（把静力做成抖动弹）② 负荷太轻（撑 40 秒却面不改色）③ 急于加量（时间和负荷同时加）。另外：<b>18 岁以下用中等强度，不加额外负重。</b>
+    </div>
+  </section>
+
+  <section>
+    <h2>四个动作：做对才算数</h2>
+    <div class="moves">
+      <div class="move">
+        <div class="idx">1</div>
+        <div>
+          <h4>靠墙静蹲 · 下肢</h4>
+          <div class="dose">每组 20–45 秒 × 4 组，组间 60 秒</div>
+          <ul>
+            <li>后背贴墙，双脚与肩同宽，向前迈出约一脚半</li>
+            <li>沿墙下滑到大腿接近与地面平行（膝关节不适就停在 120°）</li>
+            <li>膝盖对准脚尖，不内扣；腰背贴墙不留空</li>
+          </ul>
+          <div class="fix">降阶：蹲浅一点。进阶：单腿半蹲（另一脚离地）。</div>
+        </div>
+      </div>
+      <div class="move">
+        <div class="idx">2</div>
+        <div>
+          <h4>提踵半程维持 · 小腿</h4>
+          <div class="dose">每腿 20–30 秒 × 4 次</div>
+          <ul>
+            <li>单脚前掌站在台阶边缘，扶墙保持平衡</li>
+            <li>踮到最高点后，<b>只下放一半就停住</b>，保持不动</li>
+            <li>脚踝不内外翻，身体垂直不起伏</li>
+          </ul>
+          <div class="fix">降阶：双脚同时做。进阶：负重背包（18 岁以下不加）。</div>
+        </div>
+      </div>
+      <div class="move">
+        <div class="idx">3</div>
+        <div>
+          <h4>门框推 / 拉 · 上肢推拉</h4>
+          <div class="dose">推 20 秒 + 拉 20 秒，各 4 组</div>
+          <ul>
+            <li>站在门框内，双手抬到胸口高度，用力<b>向外推</b>门框，20 秒</li>
+            <li>换成手指扣住门框边缘，<b>向内拉</b>，20 秒</li>
+            <li>身体保持直立不倾斜，用肘部发力带动，别耸肩</li>
+          </ul>
+          <div class="fix">要确认门框牢固、墙体不是石膏板隔断；手指关节痛就改用前臂抵住。</div>
+        </div>
+      </div>
+      <div class="move">
+        <div class="idx">4</div>
+        <div>
+          <h4>单杠悬垂 · 抓握与肩带</h4>
+          <div class="dose">每组 20–30 秒 × 4 组</div>
+          <ul>
+            <li>正握单杠，手臂伸直，肩部微微下沉（不要完全放松垮肩）</li>
+            <li>身体静止不摆荡，呼吸自然</li>
+          </ul>
+          <div class="fix">无单杠：用厚毛巾绕在牢固横杆上做毛巾悬垂；或改为「俯卧撑最低点支撑 20 秒」替代。握力先力竭属正常，可缩短到 15 秒。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>单次训练流程（约 15–18 分钟）</h2>
+    <table>
+      <caption>把 4 个动作做成 4 轮循环，比一个动作练完再换更省时间，也更接近视频说的 10–15 分钟。</caption>
+      <thead>
+        <tr><th>环节</th><th>内容</th><th>时间 / 剂量</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>热身</td><td>原地踏步、绕肩、髋绕环、踝泵</td><td class="num">2 分钟</td></tr>
+        <tr><td>第 1 轮 → 第 4 轮（每轮）</td><td>靠墙静蹲 30 秒 → 休 20 秒 → 门框推 20 秒 → 休 20 秒 → 门框拉 20 秒 → 休 20 秒 → 单腿提踵维持 25 秒×2 侧</td><td class="num">约 3 分钟 / 轮</td></tr>
+        <tr><td>收尾</td><td>单杠悬垂 3 组 × 25 秒（组间 45 秒）</td><td class="num">约 3 分钟</td></tr>
+        <tr><td>放松</td><td>小腿、股四头、胸肩静态拉伸各 30 秒</td><td class="num">2 分钟</td></tr>
+      </tbody>
+    </table>
+    <p style="color:var(--sub);font-size:13px">注意：这 4 轮里每个动作合计 4 组，和视频"每个动作 4 组"一致；只是把组间休息压到 20 秒。若想完全照视频的 60 秒长休息，就只做 3 个动作，时间也能压在 15 分钟内。</p>
+  </section>
+
+  <section>
+    <h2>每周课表（4 周）</h2>
+    <table>
+      <thead>
+        <tr><th>周次</th><th>频率</th><th>维持时间</th><th>负荷 / 强度</th><th>重点</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>第 1 周</td><td>周一 / 三 / 五</td><td class="num">20 秒</td><td>自身体重，5–6 成力</td><td>建立动作位置，宁短勿塌</td></tr>
+        <tr><td>第 2 周</td><td>周一 / 三 / 五</td><td class="num">25–30 秒</td><td>6–7 成力</td><td>只加时间，不加负重</td></tr>
+        <tr><td>第 3 周</td><td>周一 / 二 / 四 / 六（4 天）</td><td class="num">30–40 秒</td><td>7 成力</td><td>开始单侧化：单腿静蹲、单腿提踵</td></tr>
+        <tr><td>第 4 周</td><td>3–4 天，间隔至少 1 天</td><td class="num">40–45 秒</td><td>7–8 成力</td><td>此时才可加背包负重（成年人）</td></tr>
+      </tbody>
+    </table>
+    <div class="rule" style="margin-top:14px">
+      <b>进阶规则（一次只动一个变量）：</b>先把时间从 20 秒推到 45 秒；时间顶住了，再换成单侧；单侧顶住了，最后才加负重。任何一步姿势变形，就退回上一档。<br>
+      <b>进步标准：</b>同一动作能连续两次在 45 秒内保持 7 成力且姿势不变形，即可升级。
+    </div>
+  </section>
+
+  <section>
+    <h2>训练计时器</h2>
+    <div class="timer">
+      <div>
+        <div class="phase" id="phase">准备</div>
+        <div class="display" id="display">00:30</div>
+        <div class="hint" id="hint">按住开始 → 30 秒维持 → 20 秒休息，自动循环。</div>
+      </div>
+      <div class="btns">
+        <button class="main" id="toggle">开始</button>
+        <button id="reset">重置</button>
+      </div>
+    </div>
+    <div class="presets">
+      <span data-work="20" data-rest="60">20"/60"</span>
+      <span class="on" data-work="30" data-rest="20">30"/20"</span>
+      <span data-work="45" data-rest="60">45"/60"</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>每周打卡表（可打印）</h2>
+    <table>
+      <thead>
+        <tr><th>日期</th><th>静蹲</th><th>提踵</th><th>推 / 拉</th><th>悬垂</th><th>体感（1–10）</th><th>备注</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>安全与调整</h2>
+    <ul class="checklist">
+      <li>关节（膝、肩、肘）出现刺痛立刻停止，酸胀可继续、疼痛不行。</li>
+      <li>静力维持会明显升高血压：高血压、心血管疾病、孕期请先咨询医生。</li>
+      <li>18 岁以下用中等强度，不加额外负重。</li>
+      <li>全程正常呼吸，不要憋气用力（尤其门框推拉时）。</li>
+      <li>同一肌群相邻两天不重复练，至少隔 1 天。</li>
+      <li>某一动作当天状态差，就降到 20 秒或减少 1 组，不要硬顶。</li>
+    </ul>
+  </section>
+
+  <footer>
+    内容依据抖音 @XXL健身《静力维持如何练就隐性力量》（2026-10-25 发布）整理，训练安排为通用模板，不替代医疗或专业教练评估。
+  </footer>
+</div>
+
+<script>
+(function(){
+  var work=30, rest=20, phase='idle', left=work, timer=null;
+  var display=document.getElementById('display'),
+      phaseEl=document.getElementById('phase'),
+      hint=document.getElementById('hint'),
+      toggle=document.getElementById('toggle'),
+      reset=document.getElementById('reset');
+  function fmt(s){var m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x;}
+  function render(){
+    display.textContent=fmt(left);
+    phaseEl.textContent = phase==='work'?'维持中':phase==='rest'?'休息':'准备';
+    display.style.color = phase==='work'?'#8fe0c8':phase==='rest'?'#f0c98a':'#ffffff';
+  }
+  function beep(freq){
+    try{
+      var AC=window.AudioContext||window.webkitAudioContext; if(!AC)return;
+      var ctx=new AC(), o=ctx.createOscillator(), g=ctx.createGain();
+      o.frequency.value=freq; o.connect(g); g.connect(ctx.destination);
+      g.gain.value=.12; o.start();
+      g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime+.35);
+      o.stop(ctx.currentTime+.36);
+      setTimeout(function(){ctx.close();},500);
+    }catch(e){}
+  }
+  function tick(){
+    left--;
+    if(left<=0){
+      if(phase==='work'){phase='rest';left=rest;beep(440);
+        if(navigator.vibrate)navigator.vibrate([120,80,120]);}
+      else {phase='work';left=work;beep(760);
+        if(navigator.vibrate)navigator.vibrate(200);}
+    }
+    render();
+  }
+  function start(){ if(timer)return;
+    if(phase==='idle'){phase='work';left=work;render();}
+    timer=setInterval(tick,1000); toggle.textContent='暂停';
+  }
+  function stop(){ clearInterval(timer); timer=null; toggle.textContent='继续'; }
+  toggle.onclick=function(){ timer?stop():start(); };
+  reset.onclick=function(){ stop(); phase='idle'; left=work; toggle.textContent='开始'; render(); };
+  document.querySelectorAll('.presets span').forEach(function(el){
+    el.onclick=function(){
+      document.querySelectorAll('.presets span').forEach(function(x){x.classList.remove('on');});
+      el.classList.add('on');
+      work=+el.dataset.work; rest=+el.dataset.rest;
+      stop(); phase='idle'; left=work; toggle.textContent='开始';
+      hint.textContent='按住开始 → '+work+' 秒维持 → '+rest+' 秒休息，自动循环。';
+      render();
+    };
+  });
+  render();
+})();
+</script>
+</body>
+</html>
